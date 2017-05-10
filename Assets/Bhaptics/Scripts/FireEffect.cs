@@ -12,7 +12,7 @@ public class FireEffect : MonoBehaviour
     [SerializeField] private GameObject impactEffect;
     [SerializeField] private LineRenderer gunLine;
 
-    [SerializeField] private GameObject hitEffect;
+    [SerializeField] private GameObject[] hitEffect = new GameObject[3];
     [SerializeField] private int tactsoyFeedbackIntensity = 100;
     [SerializeField] private int tactsoyFeedbackDuration = 200;
     [SerializeField] private int tactosyPointCount = 0;
@@ -20,13 +20,14 @@ public class FireEffect : MonoBehaviour
 
     private TactosyPlayer _tactosyPlayer;
     private TimeMapping timeMapping;
+    private GameObject player;
 
     void Start()
     {
         gunLine.startWidth = 0.01f;
         gunLine.endWidth = 0.02f;
         gunLine.enabled = true;
-
+        player = GameObject.Find("Player");
         _tactosyPlayer = FindObjectOfType<Manager_Tactosy>().TactosyPlayer;
         timeMapping = FindObjectOfType<TimeMapping>();
 
@@ -60,8 +61,10 @@ public class FireEffect : MonoBehaviour
             bool isSelf = TactosyTransform.IsSelf(shootHit.collider.gameObject);
             if (!isSelf)
             {
-                var effectIstance = Instantiate(hitEffect,
+                int idx = Random.Range(0, 2);
+                var effectIstance = Instantiate(hitEffect[idx],
                     shootHit.point, Quaternion.LookRotation(transform.forward)) as GameObject;
+                effectIstance.transform.LookAt(player.transform);
                 Destroy(effectIstance, 2f);
             }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Bhaptics.Scripts;
+using Valve.VR.InteractionSystem;
 using Tactosy.Common;
 using Tactosy.Unity;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class SwordDetection : MonoBehaviour
 {
     private TactosyPlayer _tactosyPlayer;
     private TimeMapping timeMapping;
+    private bool isLeftHand;
 
     void Start()
     {
@@ -20,6 +22,18 @@ public class SwordDetection : MonoBehaviour
     {
         Process(other);
     }
+
+    void HandAttachedUpdate(Hand hand)
+    {
+        if(hand.GuessCurrentHandType() == Hand.HandType.Left)
+        {
+            isLeftHand = true;
+        }
+        else
+        {
+            isLeftHand = false;
+        }
+    }
     
     void OnTriggerStay(Collider other)
     {
@@ -29,6 +43,15 @@ public class SwordDetection : MonoBehaviour
 
     private void Process(Collider other)
     {
+        if (isLeftHand)
+        {
+            _tactosyPlayer.SendSignal("SwordLeft");
+        }
+        else
+        {
+            _tactosyPlayer.SendSignal("SwordRight");
+        }
+
         RaycastHit hit;
         Debug.DrawLine(transform.parent.position, transform.parent.forward * 100, Color.red);
         if (Physics.Raycast(transform.parent.position, transform.parent.forward, out hit))
