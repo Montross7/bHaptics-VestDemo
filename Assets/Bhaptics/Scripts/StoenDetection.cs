@@ -6,9 +6,10 @@ using Tactosy.Unity;
 using UnityEngine;
 
 public class StoenDetection : MonoBehaviour {
-
+    public GameObject PopEff;
     private TactosyPlayer _tactosyPlayer;
     private TimeMapping timeMapping;
+
     void Start () {
         _tactosyPlayer = FindObjectOfType<Manager_Tactosy>().TactosyPlayer;
         timeMapping = FindObjectOfType<TimeMapping>();
@@ -25,6 +26,9 @@ public class StoenDetection : MonoBehaviour {
     {
         GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<Collider>().enabled = false;
+        Instantiate(PopEff, GetComponent<Transform>());
+
+        Destroy(gameObject, 0.1f);
 
         if (TactosyTransform.IsSelf(other.gameObject))
         {

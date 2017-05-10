@@ -17,10 +17,25 @@ public class Pistol : MonoBehaviour
 
     private void HandAttachedUpdate(Hand hand)
     {
+        bool isLeftHand = false;
         if (hand.controller.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
         {
-            _tactosyPlayer.SendSignal("RifleFire");         
-
+            if (hand.GuessCurrentHandType() == Hand.HandType.Left)
+            {
+                isLeftHand = true;
+            }
+            else
+            {
+                isLeftHand = false;
+            }
+            if (isLeftHand)
+            {
+                _tactosyPlayer.SendSignal("PistolLeftFire");
+            }
+            else
+            {
+                _tactosyPlayer.SendSignal("PistolRightFire");
+            }
             Shoot();
         }
     }

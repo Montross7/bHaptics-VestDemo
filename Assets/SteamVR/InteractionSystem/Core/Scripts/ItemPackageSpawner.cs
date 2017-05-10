@@ -135,8 +135,9 @@ namespace Valve.VR.InteractionSystem
 			{
 				if ( Time.time > 0 )
 				{
-					GameObject.Destroy( child.gameObject );
-				}
+                    GameObject.DestroyImmediate( child.gameObject );
+                    /* Have to chaged as "Destroy()" for release code */
+                }
 				else
 				{
 					GameObject.DestroyImmediate( child.gameObject );
