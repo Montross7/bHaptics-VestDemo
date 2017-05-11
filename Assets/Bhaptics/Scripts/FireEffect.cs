@@ -27,7 +27,7 @@ public class FireEffect : MonoBehaviour
         gunLine.startWidth = 0.01f;
         gunLine.endWidth = 0.02f;
         gunLine.enabled = true;
-        player = GameObject.Find("Player");
+        player = GameObject.Find("FollowHead");
         _tactosyPlayer = FindObjectOfType<Manager_Tactosy>().TactosyPlayer;
         timeMapping = FindObjectOfType<TimeMapping>();
 
@@ -64,7 +64,7 @@ public class FireEffect : MonoBehaviour
                 int idx = Random.Range(0, 2);
                 var effectIstance = Instantiate(hitEffect[idx],
                     shootHit.point, Quaternion.LookRotation(transform.forward)) as GameObject;
-                effectIstance.transform.LookAt(player.transform);
+                effectIstance.transform.rotation = go.transform.rotation;
                 Destroy(effectIstance, 2f);
             }
 

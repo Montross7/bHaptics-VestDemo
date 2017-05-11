@@ -27,6 +27,14 @@ public class ElectricGun : MonoBehaviour
         {
             LightningBolt.ManualMode = false;
             Shoot();
+            if (hand.GuessCurrentHandType() == Hand.HandType.Left)
+            {
+                _tactosyPlayer.SendSignal("ElectricgunLeft");
+            }
+            else
+            {
+                _tactosyPlayer.SendSignal("ElectricgunRight");
+            }
         }
         
         if (hand.controller.GetPressUp(SteamVR_Controller.ButtonMask.Trigger))
@@ -41,11 +49,19 @@ public class ElectricGun : MonoBehaviour
             {
                 shootSound.Shoot();
             }
-
-            if (!_tactosyPlayer.IsPlaying("Electricgun"))
+            
+            if (!_tactosyPlayer.IsPlaying("ElectricgunLeft") && !_tactosyPlayer.IsPlaying("ElectricgunRight"))
             {
-                _tactosyPlayer.SendSignal("Electricgun");
+                if (hand.GuessCurrentHandType() == Hand.HandType.Left)
+                {
+                    _tactosyPlayer.SendSignal("ElectricgunLeft");
+                }
+                else
+                {
+                    _tactosyPlayer.SendSignal("ElectricgunRight");
+                }
             }
+            
 
             Ray shootRay = new Ray(gunBarrelEnd.position, gunBarrelEnd.forward);
             
@@ -99,7 +115,6 @@ public class ElectricGun : MonoBehaviour
     private void Shoot()
     {
         shootSound.Shoot();
-        _tactosyPlayer.SendSignal("Electricgun");
     }
 
     private void ShootEnd()

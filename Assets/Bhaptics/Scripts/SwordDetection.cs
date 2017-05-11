@@ -23,18 +23,6 @@ public class SwordDetection : MonoBehaviour
         Process(other);
     }
 
-    void HandAttachedUpdate(Hand hand)
-    {
-        if(hand.GuessCurrentHandType() == Hand.HandType.Left)
-        {
-            isLeftHand = true;
-        }
-        else
-        {
-            isLeftHand = false;
-        }
-    }
-    
     void OnTriggerStay(Collider other)
     {
 //        Debug.Log("stay" + other.gameObject.name);
@@ -43,6 +31,7 @@ public class SwordDetection : MonoBehaviour
 
     private void Process(Collider other)
     {
+        /* 
         if (isLeftHand)
         {
             _tactosyPlayer.SendSignal("SwordLeft");
@@ -51,6 +40,7 @@ public class SwordDetection : MonoBehaviour
         {
             _tactosyPlayer.SendSignal("SwordRight");
         }
+        */
 
         RaycastHit hit;
         Debug.DrawLine(transform.parent.position, transform.parent.forward * 100, Color.red);
