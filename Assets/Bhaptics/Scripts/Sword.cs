@@ -8,6 +8,7 @@ public class Sword : MonoBehaviour
     private TactosyPlayer _tactosyPlayer;
     private Vector3 lastPosition;
     bool isLeftHand;
+    private float velocity;
 
     // Use this for initialization
     void Start()
@@ -15,6 +16,7 @@ public class Sword : MonoBehaviour
         isLeftHand = false;
         _tactosyPlayer = FindObjectOfType<Manager_Tactosy>().TactosyPlayer;
         lastPosition = GameObject.Find("Player").transform.position;
+        velocity = 0f;
     }
 
     // Update is called once per frame
@@ -22,7 +24,7 @@ public class Sword : MonoBehaviour
     {
         Vector3 vel = (gameObject.transform.position - lastPosition) / Time.deltaTime;
         lastPosition = gameObject.transform.position;
-        float velocity = vel.magnitude;
+        velocity = vel.magnitude;
         if(velocity > 3.5f)
         {
             if (isLeftHand)
@@ -46,5 +48,10 @@ public class Sword : MonoBehaviour
         {
             isLeftHand = false;
         }
+    }
+
+    public float getVelocity()
+    {
+        return velocity;
     }
 }

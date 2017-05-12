@@ -74,7 +74,7 @@ public class FireEffect : MonoBehaviour
                 Vector3 localPoint = shootHit.transform.InverseTransformPoint(shootHit.point);
                 Vector3 localDir = localPoint.normalized;
                 float fwdDot = Vector3.Dot(localDir, Vector3.forward);
-                Debug.Log(localDir + ", " + fwdDot);
+                //Debug.Log(localDir + ", " + fwdDot);
 
 
                 List<Point> list = new List<Point>();
@@ -83,8 +83,7 @@ public class FireEffect : MonoBehaviour
                 Point point;
                 if (isSelf)
                 {
-                    point =
-                        TactosyTransform.ConvertToSelfTactosyPoint(go.transform, shootHit.point, tactsoyFeedbackIntensity);
+                    point = TactosyTransform.ConvertToSelfTactosyPoint(go.transform, shootHit.point, tactsoyFeedbackIntensity);
 
                     if (fwdDot > 0)
                     {
@@ -102,9 +101,54 @@ public class FireEffect : MonoBehaviour
                     }
                 }
 
+                float new_x, new_y;
+                
+                // Get nearest X position
+                if(0f <= point.X && point.X < 0.25f)
+                {
+                    new_x = 0.0f;
+                }
+                else if(0.25f <= point.X && point.X < 0.5f)
+                {
+                    new_x = 0.33f;
+                }
+                else if(0.5f <= point.X && point.X < 0.75f)
+                {
+                    new_x = 0.67f;
+                }
+                else
+                {
+                    new_x = 1.0f;
+                }
+
+                // Get nearest Y position
+                if (0f <= point.Y && point.Y < 0.2f)
+                {
+                    new_y = 0.0f;
+                }
+                else if (0.2f <= point.Y && point.Y < 0.4f)
+                {
+                    new_y = 0.25f;
+                }
+                else if (0.4f <= point.Y && point.Y < 0.6f)
+                {
+                    new_y = 0.5f;
+                }
+                else if(0.6f <= point.Y && point.Y < 0.8f)
+                {
+                    new_y = 0.75f;
+                }
+                else
+                {
+                    new_y = 1f;
+                }
+
+                // Only one point will be vibrated
+                point = new Point(new_x, new_y, 1f);
                 list.Add(point);
                 backList.Add(new Point(point.X, 1f-point.Y, point.Intensity));
 
+                /*
                 for (int i = 0; i < tactosyPointCount; i++)
                 {
                     float rand = Random.Range(0, 0.5f);
@@ -113,6 +157,7 @@ public class FireEffect : MonoBehaviour
                     list.Add(new Point(xx, yy, tactsoyFeedbackIntensity));
                     backList.Add(new Point(xx, 1f-yy, tactsoyFeedbackIntensity));
                 }
+                */
 
                 StartCoroutine(PlayFeedback(timeMapping.GetDelayMillis(), isFrontFirst, list, backList));
             } else if (shootHit.collider.gameObject.tag == "Head")
