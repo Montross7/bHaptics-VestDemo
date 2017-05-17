@@ -17,4 +17,6 @@ v 0.2
 * Haptic feedbacks were optimized for Tactosy.
 * Tracking System for the vest product has been constructed.
 
-###### This file modified in May 17th, 2017, finally.
+###### Copyright (c) 2017 by bHaptics Inc. All rights reserved.
+###### Last Update: May 17th, 2017
+
