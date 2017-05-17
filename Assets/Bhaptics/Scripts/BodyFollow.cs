@@ -15,8 +15,6 @@ public class BodyFollow : MonoBehaviour {
     const float yaw = 180f;
     const float pitch = 90f;
 
-    [SerializeField] private Player player;
-    [SerializeField] private Transform Head;
     [SerializeField] private GameObject bodyObject;
     private Transform HMD;
 
@@ -35,9 +33,12 @@ public class BodyFollow : MonoBehaviour {
         Vector3 tracker_position = SteamVR_Controller.Input(5).transform.pos;
         Quaternion tracker_rotation = SteamVR_Controller.Input(5).transform.rot;
 
-        // Transform current Tracker pose to Tacvest pose 
+        // Transform current Tracker pose to Tacvest pose
+        transform.rotation = tracker_rotation * delta_rotation;
+        transform.position = tracker_position + (tracker_rotation * delta_rotation) * delta_displacement; 
+        /*
         transform.localPosition = Head.localPosition - (Head.position - (tracker_position + (tracker_rotation * delta_rotation) * delta_displacement));
-
+        */
         /* Original version things
         var direction = player.bodyDirectionGuess;
         var pos =  (player.hmdTransform.position) + new Vector3(0, -0.4f, 0);
