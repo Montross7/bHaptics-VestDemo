@@ -11,6 +11,7 @@ public class SwordDetection : MonoBehaviour
     private TactosyPlayer _tactosyPlayer;
     private TimeMapping timeMapping;
     private bool isLeftHand;
+    private float velocity;
 
     void Start()
     {
@@ -23,6 +24,11 @@ public class SwordDetection : MonoBehaviour
         Process(other);
     }
 
+    private void Update()
+    {
+        velocity = FindObjectOfType<Sword>().getVelocity();
+    }
+
     void OnTriggerStay(Collider other)
     {
 //        Debug.Log("stay" + other.gameObject.name);
@@ -31,17 +37,6 @@ public class SwordDetection : MonoBehaviour
 
     private void Process(Collider other)
     {
-        /* 
-        if (isLeftHand)
-        {
-            _tactosyPlayer.SendSignal("SwordLeft");
-        }
-        else
-        {
-            _tactosyPlayer.SendSignal("SwordRight");
-        }
-        */
-
         RaycastHit hit;
         Debug.DrawLine(transform.parent.position, transform.parent.forward * 100, Color.red);
         if (Physics.Raycast(transform.parent.position, transform.parent.forward, out hit))
@@ -62,9 +57,25 @@ public class SwordDetection : MonoBehaviour
                 Debug.DrawLine(transform.parent.position, transform.parent.forward * 100, Color.red);
 
                 Point point;
+
+                int intenseVelocity = 100;
+
+                if (velocity < 2.0f)
+                {
+                    intenseVelocity = 0;
+                }
+                else if (velocity < 8.0f)
+                {
+                    intenseVelocity = 20 + (int)(10 * velocity);
+                }
+                else
+                {
+                    intenseVelocity = 100;
+                }
+
                 if (TactosyTransform.IsSelf(other.gameObject))
                 {
-                    point = TactosyTransform.ConvertToSelfTactosyPoint(other.gameObject.transform, hit.point, 100);
+                    point = TactosyTransform.ConvertToSelfTactosyPoint(other.gameObject.transform, hit.point, intenseVelocity);
                     if (fwdDot > 0)
                     {
                         isFrontFirst = true;
@@ -72,7 +83,7 @@ public class SwordDetection : MonoBehaviour
                 }
                 else
                 {
-                    point = TactosyTransform.ConvertToTactosyPoint(other.gameObject.transform, hit.point, 100);
+                    point = TactosyTransform.ConvertToTactosyPoint(other.gameObject.transform, hit.point, intenseVelocity);
                     if (fwdDot < 0)
                     {
                         isFrontFirst = true;
