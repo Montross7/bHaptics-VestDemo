@@ -17,7 +17,7 @@ namespace Tactosy.Unity
         }
 
         [SerializeField]
-        private GameObject leftHandModel, rightHandMoadel;
+        private GameObject leftHandModel, rightHandModel, headModel, vestFrontModel, vestBackModel;
 
         [SerializeField]
         public bool visualizeFeedbacks;
@@ -58,9 +58,7 @@ namespace Tactosy.Unity
                     0, 0, 100, 100, 0,
                     0, 0, 0, 0, 0
                 };
-
-                TactosyPlayer.SendSignal("test", PositionType.VestFront, bytes, 1000);
-//                TactosyPlayer.SendSignal("Fireball", 0.2f);
+                TactosyPlayer.SendSignal("Fireball", 0.2f);
             }
         }
 
@@ -80,32 +78,27 @@ namespace Tactosy.Unity
 
         void InitializeFeedbacks()
         {
-            if (leftHandModel != null && rightHandMoadel != null)
+            if (leftHandModel != null)
             {
                 leftHandModel.gameObject.SetActive(visualizeFeedbacks);
-                rightHandMoadel.gameObject.SetActive(visualizeFeedbacks);
-
-                TactosyPlayerOnValueChanged(new TactosyFeedback(PositionType.All, new byte[20], FeedbackMode.DOT_MODE));
             }
-        }
-
-        private void UpdateFeedbacks(GameObject handModel, TactosyFeedback tactosyFeedback)
-        {
-            if (handModel == null)
+            if (rightHandModel != null)
             {
-                return;
+                rightHandModel.gameObject.SetActive(visualizeFeedbacks);
             }
-
-            var container = handModel.transform.GetChild(1);
-
-            for (int i = 0; i < container.childCount; i++)
+            if (vestFrontModel != null)
             {
-                var scale = tactosyFeedback.Values[i] / 200f;
-                if (container.transform.GetChild(i) != null)
-                {
-                    container.transform.GetChild(i).localScale = new Vector3(scale, .02f, scale);
-                }
+                vestFrontModel.gameObject.SetActive(visualizeFeedbacks);
             }
+            if (vestBackModel != null)
+            {
+                vestBackModel.gameObject.SetActive(visualizeFeedbacks);
+            }
+            if (headModel != null)
+            {
+                headModel.gameObject.SetActive(visualizeFeedbacks);
+            }
+            TactosyPlayerOnValueChanged(new TactosyFeedback(PositionType.All, new byte[20], FeedbackMode.DOT_MODE));
         }
 
         private void InitPlayer()
@@ -150,18 +143,65 @@ namespace Tactosy.Unity
 
         private void TactosyPlayerOnValueChanged(TactosyFeedback feedback)
         {
+            if (visualizeFeedbacks == false)
+            {
+                return;
+            }
+
+            if (leftHandModel == null)
+            {
+                Debug.LogError("failed to find the left hand model for feedback visualization");
+                return;
+            }
+
+            if (rightHandModel == null)
+            {
+                Debug.LogError("failed to find the right hand model for feedback visualization");
+                return;
+            }
+
+            if (vestFrontModel == null)
+            {
+                Debug.LogError("failed to find the vestFront model for feedback visualization");
+                return;
+            }
+
+            if (vestBackModel == null)
+            {
+                Debug.LogError("failed to find the vestBack model for feedback visualization");
+                return;
+            }
+
+            if (headModel == null)
+            {
+                Debug.LogError("failed to find the head model for feedback visualization");
+                return;
+            }
+
             if (feedback.Position == PositionType.Left)
             {
-                UpdateFeedbacks(leftHandModel, feedback);
+                leftHandModel.SendMessage("UpdateFeedbacks", feedback);
             }
             else if (feedback.Position == PositionType.Right)
             {
-                UpdateFeedbacks(rightHandMoadel, feedback);
+                rightHandModel.SendMessage("UpdateFeedbacks", feedback);
+            }
+            else if (feedback.Position == PositionType.VestFront)
+            {
+                vestFrontModel.SendMessage("UpdateFeedbacks", feedback);
+            }
+            else if (feedback.Position == PositionType.VestBack)
+            {
+                vestBackModel.SendMessage("UpdateFeedbacks", feedback);
+            }
+            else if (feedback.Position == PositionType.Head)
+            {
+                headModel.SendMessage("UpdateFeedbacks", feedback);
             }
             else if (feedback.Position == PositionType.All)
             {
-                UpdateFeedbacks(leftHandModel, feedback);
-                UpdateFeedbacks(rightHandMoadel, feedback);
+                leftHandModel.SendMessage("UpdateFeedbacks", feedback);
+                rightHandModel.SendMessage("UpdateFeedbacks", feedback);
             }
         }
 
