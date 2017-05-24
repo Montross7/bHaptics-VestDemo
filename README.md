@@ -12,11 +12,8 @@ A Haptic_demo for Vest and Headgear products @bHaptics Inc.
 * Haptic feedbacks for Tactosy, Vest and Headgear products.
 
 ## Latest Version
-v 0.2
-* Some issues have been solved.
-* Haptic feedbacks were optimized for Tactosy.
-* Tracking System for the vest product has been constructed.
+v 0.3
+* Haptic Visualization for DEVs has been constructed.
 
 ###### Copyright (c) 2017 by bHaptics Inc. All rights reserved.
-###### Last Update: May 17th, 2017
-
+###### Last Update: May 24th, 2017
